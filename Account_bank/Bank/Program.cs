@@ -47,26 +47,14 @@ namespace Bank
                         Accounts.deposit();
                         break;
 
-            //        case 3:
-            //            Console.WriteLine("Enter the ammount you want to withdraw: ");
-            //            int withdraw_amt = int.Parse(Console.ReadLine());
-            //            Console.WriteLine("Enter the Account type: ");
-            //            string type_account = Console.ReadLine();
-            //            Console.WriteLine("Enter the account number: ");
-            //            int acc_number = int.Parse(Console.ReadLine());
-            //            Accounts.withdraw(withdraw_amt, type_account, acc_number);
-            //            break;
+                   case 3:
+                        Accounts.withdraw();
+                        break;
 
-            //        case 4:
-            //            Console.WriteLine("Enter the account number whose interest you want to calculate: ");
-            //            int no_acc = int.Parse(Console.ReadLine());
-            //            Console.WriteLine("Enter the account type whose interest you want to calculate: ");
-            //            //account_type = Console.ReadLine();
+                   case 4:
+                        Accounts.interest();
 
-
-            //            //Accounts.interest(no_acc, account_type);
-
-            //            break;
+                        break;
 
               }
 

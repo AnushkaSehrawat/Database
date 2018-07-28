@@ -23,30 +23,68 @@ namespace Account_bank
 
         }
 
-        public static void search(int id)
+        public static int search(int id)
         {
-            int x = 0;
+            int balance = -100000000;
             int acc_id=0;
             SqlCommand cmd = con.CreateCommand();
             cmd.CommandType = CommandType.Text;
             cmd.CommandText = "select * from Account where account_id=@id";
             cmd.Parameters.Add(new SqlParameter("@id",id));
-            Console.WriteLine(cmd.ExecuteNonQuery());
+            SqlDataReader sq = cmd.ExecuteReader();
            // Console.WriteLine(acc_id);
-            if (acc_id==-1)
+            if (!sq.HasRows)
             {
-                Console.WriteLine("The given account_id does not exists. Please enter valid account_id");
+                Console.WriteLine("No Entry in the database");
             }
             else
             {
-                int balance;
-                cmd.CommandText = "select balance from ACCOUNT where account_id=@id";
-                cmd.Parameters.Add(new SqlParameter("@id", id));
-                balance = cmd.ExecuteNonQuery();
-                Console.WriteLine(balance);
+                while (sq.Read())
+                {
+                    acc_id = sq.GetInt32(sq.GetOrdinal("account_id")) ;
+                    if (acc_id==id)
+                    {
+                        balance = sq.GetInt32(sq.GetOrdinal("balance"));
+                        break;
+                    }
+                }
 
 
             }
+            return balance;
+
+
+        }
+        public static string search_acc_type(int id)
+        {
+            
+            int acc_id;
+            string Acc_type = null; 
+            SqlCommand cmd = con.CreateCommand();
+            cmd.CommandType = CommandType.Text;
+            cmd.CommandText = "select * from Account where account_id=@id";
+            cmd.Parameters.Add(new SqlParameter("@id", id));
+            SqlDataReader sq = cmd.ExecuteReader();
+            // Console.WriteLine(acc_id);
+            if (!sq.HasRows)
+            {
+                Console.WriteLine("No Entry in the database");
+            }
+            else
+            {
+                while (sq.Read())
+                {
+                    acc_id = sq.GetInt32(sq.GetOrdinal("account_id"));
+                    if (acc_id == id)
+                    {
+                        Acc_type = sq.GetString(sq.GetOrdinal("account_type"));
+                        break;
+                    }
+                }
+
+
+            }
+            return Acc_type;
 
 
         }
@@ -70,6 +108,51 @@ namespace Account_bank
                 Console.WriteLine(sq.Message);
             }
          
+
+        }
+
+        public static void Update(int bal,int id)
+        {
+            SqlCommand cmd = con.CreateCommand();
+            cmd.CommandType = CommandType.Text;
+            cmd.CommandText = "Update ACCOUNT set balance=@bal where account_id=@id ";
+            cmd.Parameters.Add(new SqlParameter("@bal",bal));
+            cmd.Parameters.Add(new SqlParameter("@id", id));
+            cmd.ExecuteNonQuery();
+
+        }
+
+        public static void Display(int id)
+        {
+            Console.WriteLine("Enter the account Id whose details you want to display:");
+            id = int.Parse(Console.ReadLine());
+            SqlCommand cmd = con.CreateCommand();
+            cmd.CommandType = CommandType.Text;
+            cmd.CommandText = "select *from ACCOUNT";
+            SqlDataReader sqr = cmd.ExecuteReader();
+            if (sqr.HasRows)
+            {
+                while (sqr.Read())
+                {
+                    int acc_id = sqr.GetInt32(sqr.GetOrdinal("account_id"));
+                    string name = sqr.GetString(sqr.GetOrdinal("name"));
+                    string acc_type = sqr.GetString(sqr.GetOrdinal("acc_type"));
+                    int balance = sqr.GetInt32(sqr.GetOrdinal("balance"));
+                    if (acc_id==id)
+                    {
+                        Console.WriteLine(id+" "+name+" "+acc_type+" "+balance);
+                        break;
+
+                    }
+
+                }
+
+            }
+            else
+            {
+                Console.WriteLine("The table is empty");
+            }
+
 
         }
 
